@@ -5,6 +5,7 @@ import EditEmployeeForm from '../editEmployee/EditEmployeeForm';
 import { useNavigate } from 'react-router-dom';
 import EmployeeSearchInput from '../../components/SearchInput';
 import profile from './images/image.png'
+
 const EmployeeList = () => {
     const { employees, totalEmployees, loading, fetchEmployees, deleteEmployee } = useFetchEmployees();
     const [editingEmployee, setEditingEmployee] = useState(null);
@@ -12,6 +13,7 @@ const EmployeeList = () => {
     const [sortField, setSortField] = useState("");
     const [sortOrder, setSortOrder] = useState("asc");
     const navigate = useNavigate();
+    console.log(employees);
 
     const sortedEmployees = useMemo(() => {
         let sortedList = [...employees];
@@ -123,9 +125,20 @@ const EmployeeList = () => {
                                 <tr key={employee._id}>
                                     <td className="border px-4 py-2 text-black">
                                         {employee.image ? (
-                                            <img src={profile || employee.image } alt={employee.name} className="h-10 w-10 object-cover" />
+                                            <>
+                                                {console.log(`${import.meta.env.REACT_APP_API_URL || 'http://localhost:8000'}${employee.image}`)}
+                                                <img
+                                                    src={`${import.meta.env.REACT_APP_API_URL || 'http://localhost:8000'}${employee.image}`}
+                                                    alt={employee.name}
+                                                    className="h-10 w-10 object-cover"
+                                                />
+                                            </>
                                         ) : (
-                                            <span>No Image</span>
+                                            <img
+                                                src={profile}
+                                                alt={employee.name}
+                                                className="h-10 w-10 object-cover"
+                                            />
                                         )}
                                     </td>
                                     <td className="border px-4 py-2 text-black">{employee.name}</td>
@@ -133,7 +146,7 @@ const EmployeeList = () => {
                                     <td className="border px-4 py-2 text-black">{employee.mobileNo}</td>
                                     <td className="border px-4 py-2 text-black">{employee.designation}</td>
                                     <td className="border px-4 py-2 text-black">{employee.gender}</td>
-                                    <td className="border px-4 py-2 text-black">{JSON.parse(employee.course).join(', ')}</td>
+                                    <td className="border px-4 py-2 text-black"> { JSON.parse(employee.course).join(', ') }</td>
                                     <td className="border px-4 py-2 text-black">{new Date(employee.createdAt).toLocaleDateString()}</td>
                                     <td className="border px-4 py-2 text-black">
                                         <button
